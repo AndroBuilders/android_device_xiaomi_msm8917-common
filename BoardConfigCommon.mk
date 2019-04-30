@@ -78,6 +78,10 @@ QCOM_BT_USE_SMD_TTY := true
 # Charger
 BOARD_CHARGER_DISABLE_INIT_BLANK := true
 BOARD_CHARGER_ENABLE_SUSPEND := true
+WITH_LINEAGE_CHARGER := false
+
+# Display
+BOARD_USES_ADRENO := true
 
 # Encryption
 TARGET_HW_DISK_ENCRYPTION := true
@@ -91,6 +95,15 @@ TARGET_FS_CONFIG_GEN := $(VENDOR_PATH)/config.fs
 # FM
 BOARD_HAVE_QCOM_FM := true
 TARGET_QCOM_NO_FM_FIRMWARE := true
+
+# Hack for remove stuffs
+$(shell rm -rf vendor/qcom/opensource/commonsys/kernel-headers)
+
+# Hal Target
+TARGET_QCOM_BLUETOOTH_VARIANT := caf-msm8996
+TARGET_QCOM_DISPLAY_VARIANT := caf-msm8996
+TARGET_QCOM_AUDIO_VARIANT := caf-msm8996
+TARGET_QCOM_MEDIA_VARIANT := caf-msm8996
 
 # GPS
 BOARD_VENDOR_QCOM_GPS_LOC_API_HARDWARE := true
@@ -119,18 +132,14 @@ BOARD_KERNEL_CMDLINE := androidboot.hardware=qcom msm_rtb.filter=0x237 ehci-hcd.
 BOARD_KERNEL_IMAGE_NAME := Image.gz-dtb
 BOARD_KERNEL_PAGESIZE := 2048
 BOARD_MKBOOTIMG_ARGS := --ramdisk_offset 0x01000000 --tags_offset 0x00000100
-
+BOARD_KERNEL_CMDLINE += androidboot.selinux=permissive
 TARGET_KERNEL_ARCH := arm64
 TARGET_KERNEL_SOURCE := kernel/xiaomi/msm8917
 
 # Lights
 TARGET_PROVIDES_LIBLIGHT := true
 
-# Lineage Hardware
-BOARD_HARDWARE_CLASS += $(VENDOR_PATH)/lineagehw
-
 # Tap2Wake
-
 TARGET_TAP_TO_WAKE_NODE := "/proc/gesture/onoff"
 
 # Malloc
@@ -169,8 +178,9 @@ TARGET_PROVIDES_QTI_TELEPHONY_JAR := true
 TARGET_RIL_VARIANT := caf
 
 # SELinux
-include device/qcom/sepolicy/sepolicy.mk
+#include device/qcom/sepolicy/sepolicy.mk
 BOARD_SEPOLICY_DIRS += $(VENDOR_PATH)/sepolicy/vendor
+include vendor/omni/sepolicy/sepolicy.mk
 
 # Treble
 BOARD_PROPERTY_OVERRIDES_SPLIT_ENABLED := true
